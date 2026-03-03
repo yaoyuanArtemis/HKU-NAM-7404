@@ -1,0 +1,29 @@
+neural_additive_models/requirements_baseline.txt
+  8415efdbc8a687f0 1-6
+neural_additive_models/BASELINE_COMPARISON.md
+  8415efdbc8a687f0 1-186
+neural_additive_models/run_comparison.py
+  8415efdbc8a687f0 1-183
+neural_additive_models/baseline_comparison.py
+  8415efdbc8a687f0 1-365
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "0c5908adf25682da4b538abe2c172f40b32263eb",
+  "prompts": {
+    "8415efdbc8a687f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959629c6-f63f-46aa-a84b-26cd76058679",
+        "model": "claude-sonnet-4-5-20250929"
+      },
+      "human_author": "liufeng <feng.liu@bybit.com>",
+      "messages": [],
+      "total_additions": 740,
+      "total_deletions": 0,
+      "accepted_lines": 740,
+      "overriden_lines": 0
+    }
+  }
+}
