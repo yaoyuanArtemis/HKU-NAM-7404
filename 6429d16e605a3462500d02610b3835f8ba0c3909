@@ -1,0 +1,29 @@
+neural_additive_models/FILES_OVERVIEW.md
+  8415efdbc8a687f0 3,5,7-8,31,33-34
+neural_additive_models/compare_all_models.py
+  8415efdbc8a687f0 1-467
+neural_additive_models/BASELINE_COMPARISON.md
+  8415efdbc8a687f0 7-12,34-71,199-275
+neural_additive_models/COMPARISON_QUICK_START.md
+  8415efdbc8a687f0 1-237
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "6429d16e605a3462500d02610b3835f8ba0c3909",
+  "prompts": {
+    "8415efdbc8a687f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959629c6-f63f-46aa-a84b-26cd76058679",
+        "model": "claude-sonnet-4-5-20250929"
+      },
+      "human_author": "liufeng <feng.liu@bybit.com>",
+      "messages": [],
+      "total_additions": 1427,
+      "total_deletions": 136,
+      "accepted_lines": 1327,
+      "overriden_lines": 0
+    }
+  }
+}
