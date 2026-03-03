@@ -4,11 +4,12 @@
 
 ## 支持的模型
 
-1. **Logistic Regression / Linear Regression** - 简单的线性模型
-2. **CART (Decision Tree)** - 基于树的可解释模型
-3. **XGBoost** - 梯度提升树集成模型
-4. **DNN-MLP** - 深度神经网络（多层感知机）
-5. **EBM (Explainable Boosting Machine)** - 可解释的梯度提升模型（Boosted GAM）
+1. **NAM (Neural Additive Model)** - 可解释的神经网络模型
+2. **Logistic Regression / Linear Regression** - 简单的线性模型
+3. **CART (Decision Tree)** - 基于树的可解释模型
+4. **XGBoost** - 梯度提升树集成模型
+5. **DNN-MLP** - 深度神经网络（多层感知机）
+6. **EBM (Explainable Boosting Machine)** - 可解释的梯度提升模型（Boosted GAM）
 
 ## 安装依赖
 
@@ -30,7 +31,44 @@ pip install -r requirements_baseline.txt
 pip install xgboost scikit-learn interpret
 ```
 
-## 使用方法
+## 推荐使用方法 ⭐
+
+### **使用 `compare_all_models.py` 统一对比脚本（推荐）**
+
+这是**最简单**的方式，一个命令运行所有对比：
+
+```bash
+# 基本使用
+python compare_all_models.py \
+    --data_path ./data/my_dataset.csv \
+    --target_column label
+
+# 完整参数示例
+python compare_all_models.py \
+    --data_path ./data/my_dataset.csv \
+    --target_column label \
+    --task classification \
+    --models all \
+    --test_size 0.2 \
+    --val_size 0.2 \
+    --output_dir ./results
+```
+
+**优势：**
+- ✅ 自动处理数据分割
+- ✅ 自动标准化特征
+- ✅ 统一的结果格式
+- ✅ 自动生成对比报告（CSV + Markdown）
+- ✅ 可选择运行特定模型
+
+**输出：**
+- `train_split.csv`, `val_split.csv`, `test_split.csv` - 数据分割
+- `{dataset}_comparison.csv` - 结果表格
+- `{dataset}_report.md` - 格式化的对比报告
+
+---
+
+## 其他使用方法
 
 ### 方法 1: 使用 `baseline_comparison.py` 模块
 
@@ -62,28 +100,7 @@ print(results_df)
 comparison.save_results('./results', dataset_name='my_dataset')
 ```
 
-### 方法 2: 使用 `run_comparison.py` 命令行脚本
-
-```bash
-# 分类任务示例
-python run_comparison.py \
-    --data_path ./data/my_dataset.csv \
-    --task classification \
-    --target_column label \
-    --output_dir ./comparison_results
-
-# 回归任务示例
-python run_comparison.py \
-    --data_path ./data/my_dataset.csv \
-    --task regression \
-    --target_column target \
-    --test_size 0.2 \
-    --val_size 0.2 \
-    --random_state 42 \
-    --output_dir ./comparison_results
-```
-
-### 方法 3: 运行内置示例
+### 方法 2: 运行内置示例
 
 ```bash
 python baseline_comparison.py
@@ -178,6 +195,83 @@ NAM 论文中对比了以下模型：
 - EBMs (GAM²)
 
 本代码实现了所有这些基线模型，可以复现论文中的对比实验。
+
+## 脚本说明
+
+| 脚本 | 类型 | 用途 | 推荐度 |
+|------|------|------|--------|
+| `compare_all_models.py` | 命令行工具 | 一键完整对比 + NAM 指导 | ⭐⭐⭐ 最推荐 |
+| `baseline_comparison.py` | Python 类库 | 核心模块，编程接口 | ⭐⭐⭐ 必需依赖 |
+| `nam_train.py` | NAM 专用 | NAM 模型训练（项目原始文件） | ⭐⭐⭐ NAM 训练 |
+
+## 快速开始示例
+
+```bash
+# 1. 准备你的数据（CSV 格式）
+# 假设你有 data.csv，包含特征列和一个目标列 'target'
+
+# 2. 运行完整对比
+python compare_all_models.py \
+    --data_path data.csv \
+    --target_column target \
+    --task classification
+
+# 3. 查看结果
+cat comparison_results/data_comparison.csv
+cat comparison_results/data_report.md
+```
+
+## 常见问题
+
+### Q: 如何只运行某些特定模型？
+
+```bash
+# 只运行 XGBoost 和 DNN-MLP
+python compare_all_models.py \
+    --data_path data.csv \
+    --target_column target \
+    --models xgboost mlp
+```
+
+### Q: 如何调整 NAM 的超参数？
+
+```bash
+python compare_all_models.py \
+    --data_path data.csv \
+    --target_column target \
+    --nam_epochs 2000 \
+    --nam_lr 0.001 \
+    --nam_dropout 0.3
+```
+
+### Q: 如何单独训练 NAM 模型？
+
+NAM 有专门的训练脚本：
+
+```bash
+python nam_train.py \
+    --dataset_name my_dataset \
+    --regression False \
+    --training_epochs 1000 \
+    --learning_rate 0.01 \
+    --logdir ./nam_logs
+```
+
+### Q: baseline_comparison.py 和 compare_all_models.py 有什么区别？
+
+- `baseline_comparison.py`: Python 模块，提供 `BaselineComparison` 类，用于编程接口
+- `compare_all_models.py`: 命令行工具，自动处理数据并运行所有对比，更方便
+
+### Q: 我的数据很大，训练时间太长怎么办？
+
+```bash
+# 减少 NAM 训练轮数
+python compare_all_models.py \
+    --data_path data.csv \
+    --target_column target \
+    --nam_epochs 500 \
+    --models xgboost cart  # 只运行快速模型
+```
 
 ## 参考文献
 
