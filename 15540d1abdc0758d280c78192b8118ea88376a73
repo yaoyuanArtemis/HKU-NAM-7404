@@ -1,0 +1,41 @@
+neural_additive_models/DATASETS.md
+  8415efdbc8a687f0 1-156,158-235,237-257
+neural_additive_models/NAM_Baseline_Comparison.ipynb
+  8415efdbc8a687f0 1-111,113-149,151-193,195-317,319-438
+neural_additive_models/COLAB_GUIDE.md
+  8415efdbc8a687f0 1-38,41-81,83-92,94-111,113-142,144-219,221-265,267-349
+neural_additive_models/SYNC_QUICK_START.md
+  8415efdbc8a687f0 1-231
+neural_additive_models/NAM_GitHub_Sync.ipynb
+  8415efdbc8a687f0 1-349,351-369
+neural_additive_models/run_experiment.py
+  8415efdbc8a687f0 32
+neural_additive_models/COLAB_SYNC_GUIDE.md
+  8415efdbc8a687f0 1-367
+neural_additive_models/.gitignore
+  8415efdbc8a687f0 1-76
+neural_additive_models/README_PROJECT.md
+  8415efdbc8a687f0 1-244
+neural_additive_models/run_all_datasets.py
+  8415efdbc8a687f0 1-302
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "15540d1abdc0758d280c78192b8118ea88376a73",
+  "prompts": {
+    "8415efdbc8a687f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959629c6-f63f-46aa-a84b-26cd76058679",
+        "model": "claude-sonnet-4-5-20250929"
+      },
+      "human_author": "liufeng <feng.liu@bybit.com>",
+      "messages": [],
+      "total_additions": 2714,
+      "total_deletions": 158,
+      "accepted_lines": 2619,
+      "overriden_lines": 13
+    }
+  }
+}
