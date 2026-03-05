@@ -1,6 +1,12 @@
 """批量在多个数据集上运行基线模型对比实验。
 
+使用下载到本地的数据集（而不是从 GCS 读取）。
+
 Usage:
+    # 首先下载数据集
+    python download_datasets.py
+
+    # 然后运行实验
     python run_all_datasets.py
 """
 
@@ -11,23 +17,56 @@ from datetime import datetime
 import pandas as pd
 
 
-# NAM 论文使用的数据集配置
+# 数据目录
+DATA_DIR = './datasets'
+
+
+# NAM 论文使用的数据集配置（使用本地文件）
 DATASETS = {
-    # 分类任务
-    'Telco': {'task': 'classification', 'target': 'Churn'},
-    'BreastCancer': {'task': 'classification', 'target': 'target'},
-    'Adult': {'task': 'classification', 'target': 'Income'},
-    'Heart': {'task': 'classification', 'target': 'target'},
-    'Credit': {'task': 'classification', 'target': 'Class'},
-    'Recidivism': {'task': 'classification', 'target': 'is_recid'},
+    # 分类任务（sklearn 内置，自动生成）
+    'BreastCancer': {
+        'file': 'breast_cancer.csv',
+        'task': 'classification',
+        'target': 'target'
+    },
+
+    # 分类任务（可从公开源下载）
+    'Adult': {
+        'file': 'adult.csv',
+        'task': 'classification',
+        'target': 'income'
+    },
+    'Heart': {
+        'file': 'heart_disease.csv',
+        'task': 'classification',
+        'target': 'target'
+    },
+    'Telco': {
+        'file': 'telco_churn.csv',
+        'task': 'classification',
+        'target': 'Churn'
+    },
+    'Recidivism': {
+        'file': 'compas_recidivism.csv',
+        'task': 'classification',
+        'target': 'two_year_recid'
+    },
+
+    # 分类任务（需要手动下载）
+    'Credit': {
+        'file': 'creditcard.csv',
+        'task': 'classification',
+        'target': 'Class',
+        'manual': True  # 需要手动下载
+    },
 
     # 回归任务
-    'Housing': {'task': 'regression', 'target': 'target'},
-    'Fico': {'task': 'regression', 'target': 'RiskPerformance'},
+    'Housing': {
+        'file': 'california_housing.csv',
+        'task': 'regression',
+        'target': 'target'
+    },
 }
-
-# MIMIC-II 需要特殊授权，默认跳过
-SKIP_DATASETS = ['Mimic2']
 
 
 def run_experiment_on_dataset(dataset_name, config, output_dir='./all_results'):
@@ -35,7 +74,7 @@ def run_experiment_on_dataset(dataset_name, config, output_dir='./all_results'):
 
     Args:
         dataset_name: 数据集名称
-        config: 数据集配置 (task, target)
+        config: 数据集配置 (file, task, target)
         output_dir: 结果输出目录
 
     Returns:
@@ -45,45 +84,48 @@ def run_experiment_on_dataset(dataset_name, config, output_dir='./all_results'):
     print(f"📊 运行数据集: {dataset_name}")
     print("="*70)
 
-    # 创建 CSV 文件（使用 data_utils 加载）
+    # 检查是否需要手动下载
+    if config.get('manual'):
+        print(f"⚠️  {dataset_name} 需要手动下载")
+        print(f"   请先运行: python download_datasets.py")
+        print(f"   并按照提示手动下载")
+        return False
+
+    # 检查数据文件是否存在
+    data_file = os.path.join(DATA_DIR, config['file'])
+
+    if not os.path.exists(data_file):
+        print(f"❌ 数据文件不存在: {data_file}")
+        print(f"   请先运行: python download_datasets.py")
+        return False
+
+    print(f"✓ 找到数据文件: {data_file}")
+
+    # 读取数据查看基本信息
     try:
-        from data_utils import load_dataset
-        import numpy as np
+        df = pd.read_csv(data_file)
+        print(f"  数据形状: {df.shape}")
+        print(f"  目标列: {config['target']}")
 
-        print(f"从 GCS 加载数据集...")
-        dataset = load_dataset(dataset_name)
-        X = dataset['X']
-        y = dataset['y']
-
-        # 保存为临时 CSV
-        import pandas as pd
-        df = X.copy()
-
-        # 处理目标列
-        if isinstance(y, pd.Series):
-            df['target'] = y.values
-        else:
-            df['target'] = y
-
-        temp_csv = f'/tmp/{dataset_name}_temp.csv'
-        df.to_csv(temp_csv, index=False)
-
-        print(f"✓ 数据集已加载: {X.shape[0]} 样本, {X.shape[1]} 特征")
+        if config['target'] not in df.columns:
+            print(f"  ⚠️  目标列 '{config['target']}' 不存在")
+            print(f"  可用列: {list(df.columns)}")
+            return False
 
     except Exception as e:
-        print(f"❌ 加载数据集失败: {e}")
+        print(f"❌ 读取数据失败: {e}")
         return False
 
     # 运行对比实验
     cmd = [
         'python', 'run_experiment.py',
-        '--data_path', temp_csv,
-        '--target_column', 'target',
+        '--data_path', data_file,
+        '--target_column', config['target'],
         '--task', config['task'],
         '--output_dir', output_dir
     ]
 
-    print(f"运行命令: {' '.join(cmd)}")
+    print(f"\n运行命令: {' '.join(cmd)}")
 
     try:
         start_time = time.time()
@@ -92,11 +134,6 @@ def run_experiment_on_dataset(dataset_name, config, output_dir='./all_results'):
 
         if result.returncode == 0:
             print(f"✓ {dataset_name} 完成！用时: {elapsed_time:.1f}秒")
-
-            # 清理临时文件
-            if os.path.exists(temp_csv):
-                os.remove(temp_csv)
-
             return True
         else:
             print(f"❌ {dataset_name} 失败！")
@@ -244,7 +281,14 @@ def main():
     print("="*70)
     print(f"数据集数量: {len(DATASETS)}")
     print(f"数据集列表: {', '.join(DATASETS.keys())}")
+    print(f"数据目录: {DATA_DIR}")
     print("")
+
+    # 检查数据目录
+    if not os.path.exists(DATA_DIR):
+        print(f"❌ 数据目录不存在: {DATA_DIR}")
+        print(f"\n请先运行: python download_datasets.py")
+        return
 
     # 创建输出目录
     output_dir = './all_results'
@@ -259,10 +303,6 @@ def main():
 
     # 遍历所有数据集
     for dataset_name, config in DATASETS.items():
-        if dataset_name in SKIP_DATASETS:
-            print(f"\n⏭️  跳过 {dataset_name} (需要特殊授权)")
-            continue
-
         success = run_experiment_on_dataset(dataset_name, config, output_dir)
 
         if success:
@@ -287,7 +327,7 @@ def main():
     print("✅ 批量实验完成！")
     print("="*70)
     print(f"总用时: {total_time/60:.1f} 分钟")
-    print(f"成功: {success_count}/{len(DATASETS) - len(SKIP_DATASETS)}")
+    print(f"成功: {success_count}/{len(DATASETS)}")
 
     if failed_datasets:
         print(f"失败的数据集: {', '.join(failed_datasets)}")
