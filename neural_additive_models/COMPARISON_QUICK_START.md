@@ -3,7 +3,7 @@
 ## 🎯 最简单的方式（推荐）
 
 ```bash
-python compare_all_models.py \
+python run_experiment.py \
     --data_path your_data.csv \
     --target_column your_target_column
 ```
@@ -16,7 +16,7 @@ python compare_all_models.py \
 
 ## 📁 对比脚本说明（仅2个文件）
 
-### 1️⃣ `compare_all_models.py` ⭐ **命令行工具（推荐）**
+### 1️⃣ `run_experiment.py` ⭐ **命令行工具（推荐）**
 **一键运行完整对比**
 
 **功能**:
@@ -29,18 +29,18 @@ python compare_all_models.py \
 **使用**:
 ```bash
 # 基本用法：运行所有模型
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column label
 
 # 高级用法：只运行部分模型
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column label \
     --models xgboost cart mlp
 
 # 自定义参数
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column label \
     --task regression \
@@ -50,14 +50,14 @@ python compare_all_models.py \
 
 ---
 
-### 2️⃣ `baseline_comparison.py` - **Python 编程接口**
+### 2️⃣ `baseline_models.py` - **Python 编程接口**
 **给开发者的核心类库**
 
 **功能**:
 - 💻 提供 `BaselineComparison` 类
 - 🔧 适合集成到自定义代码
 - 🎛️ 灵活控制训练流程
-- 📦 被 `compare_all_models.py` 调用
+- 📦 被 `run_experiment.py` 调用
 
 **使用**:
 ```python
@@ -99,7 +99,7 @@ python nam_train.py \
 
 ### 步骤 2: 运行对比
 ```bash
-python compare_all_models.py \
+python run_experiment.py \
     --data_path your_data.csv \
     --target_column target
 ```
@@ -169,7 +169,7 @@ cat comparison_results/your_data_report.md
 
 ### 场景 1: 快速对比所有基线模型（命令行）
 ```bash
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column label
 ```
@@ -179,7 +179,7 @@ python compare_all_models.py \
 
 ### 场景 2: 只对比特定模型（如 XGBoost 和树模型）
 ```bash
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column label \
     --models xgboost cart
@@ -205,12 +205,12 @@ results = comparison.train_and_evaluate(
 
 **Q: 为什么 NAM 没有直接集成到对比脚本中？**
 
-A: NAM 使用 TensorFlow 1.x，有独立的训练流程。`compare_all_models.py` 会告诉你如何单独运行 NAM，并提供命令示例。
+A: NAM 使用 TensorFlow 1.x，有独立的训练流程。`run_experiment.py` 会告诉你如何单独运行 NAM，并提供命令示例。
 
 **Q: 哪个脚本最适合我？**
 
-- **命令行快速对比** → `compare_all_models.py` ⭐ (推荐)
-- **编程接口集成** → `baseline_comparison.py`
+- **命令行快速对比** → `run_experiment.py` ⭐ (推荐)
+- **编程接口集成** → `baseline_models.py`
 - **只训练 NAM** → `nam_train.py` (项目原始文件)
 
 **Q: 如何选择合适的模型？**

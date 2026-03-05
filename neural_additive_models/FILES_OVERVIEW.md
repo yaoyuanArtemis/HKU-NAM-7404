@@ -4,8 +4,8 @@
 
 | 文件 | 用途 | 推荐度 | 说明 |
 |------|------|--------|------|
-| `compare_all_models.py` | 命令行对比工具 | ⭐⭐⭐ | 最推荐 |
-| `baseline_comparison.py` | Python 核心类库 | ⭐⭐⭐ | 必需依赖 |
+| `run_experiment.py` | 命令行对比工具 | ⭐⭐⭐ | 最推荐 |
+| `baseline_models.py` | Python 核心类库 | ⭐⭐⭐ | 必需依赖 |
 
 ## 📚 文档（3个）
 
@@ -22,7 +22,7 @@
 pip install xgboost scikit-learn interpret pandas numpy
 
 # 2. 运行对比
-python compare_all_models.py --data_path data.csv --target_column label
+python run_experiment.py --data_path data.csv --target_column label
 
 # 3. 查看结果
 cat comparison_results/data_comparison.csv
@@ -30,8 +30,8 @@ cat comparison_results/data_comparison.csv
 
 ## 💡 如何使用？
 
-- **命令行对比** → `compare_all_models.py` （一键搞定，推荐）
-- **代码集成** → `baseline_comparison.py` （Python API）
+- **命令行对比** → `run_experiment.py` （一键搞定，推荐）
+- **代码集成** → `baseline_models.py` （Python API）
 
 ## 📖 详细文档
 

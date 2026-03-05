@@ -33,18 +33,18 @@ pip install xgboost scikit-learn interpret
 
 ## 推荐使用方法 ⭐
 
-### **使用 `compare_all_models.py` 统一对比脚本（推荐）**
+### **使用 `run_experiment.py` 统一对比脚本（推荐）**
 
 这是**最简单**的方式，一个命令运行所有对比：
 
 ```bash
 # 基本使用
-python compare_all_models.py \
+python run_experiment.py \
     --data_path ./data/my_dataset.csv \
     --target_column label
 
 # 完整参数示例
-python compare_all_models.py \
+python run_experiment.py \
     --data_path ./data/my_dataset.csv \
     --target_column label \
     --task classification \
@@ -70,7 +70,7 @@ python compare_all_models.py \
 
 ## 其他使用方法
 
-### 方法 1: 使用 `baseline_comparison.py` 模块
+### 方法 1: 使用 `baseline_models.py` 模块
 
 ```python
 from baseline_comparison import BaselineComparison
@@ -103,7 +103,7 @@ comparison.save_results('./results', dataset_name='my_dataset')
 ### 方法 2: 运行内置示例
 
 ```bash
-python baseline_comparison.py
+python baseline_models.py
 ```
 
 这会运行一个内置的示例，使用 scikit-learn 生成的数据集展示分类和回归任务。
@@ -162,7 +162,7 @@ print(f"Test AUROC: {nam_test_auroc:.4f}")
 
 ## 自定义模型参数
 
-你可以修改 `baseline_comparison.py` 中的 `initialize_models()` 方法来调整每个模型的超参数：
+你可以修改 `baseline_models.py` 中的 `initialize_models()` 方法来调整每个模型的超参数：
 
 ```python
 def initialize_models(self):
@@ -200,8 +200,8 @@ NAM 论文中对比了以下模型：
 
 | 脚本 | 类型 | 用途 | 推荐度 |
 |------|------|------|--------|
-| `compare_all_models.py` | 命令行工具 | 一键完整对比 + NAM 指导 | ⭐⭐⭐ 最推荐 |
-| `baseline_comparison.py` | Python 类库 | 核心模块，编程接口 | ⭐⭐⭐ 必需依赖 |
+| `run_experiment.py` | 命令行工具 | 一键完整对比 + NAM 指导 | ⭐⭐⭐ 最推荐 |
+| `baseline_models.py` | Python 类库 | 核心模块，编程接口 | ⭐⭐⭐ 必需依赖 |
 | `nam_train.py` | NAM 专用 | NAM 模型训练（项目原始文件） | ⭐⭐⭐ NAM 训练 |
 
 ## 快速开始示例
@@ -211,7 +211,7 @@ NAM 论文中对比了以下模型：
 # 假设你有 data.csv，包含特征列和一个目标列 'target'
 
 # 2. 运行完整对比
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column target \
     --task classification
@@ -227,7 +227,7 @@ cat comparison_results/data_report.md
 
 ```bash
 # 只运行 XGBoost 和 DNN-MLP
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column target \
     --models xgboost mlp
@@ -236,7 +236,7 @@ python compare_all_models.py \
 ### Q: 如何调整 NAM 的超参数？
 
 ```bash
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column target \
     --nam_epochs 2000 \
@@ -257,16 +257,16 @@ python nam_train.py \
     --logdir ./nam_logs
 ```
 
-### Q: baseline_comparison.py 和 compare_all_models.py 有什么区别？
+### Q: baseline_models.py 和 run_experiment.py 有什么区别？
 
-- `baseline_comparison.py`: Python 模块，提供 `BaselineComparison` 类，用于编程接口
-- `compare_all_models.py`: 命令行工具，自动处理数据并运行所有对比，更方便
+- `baseline_models.py`: Python 模块，提供 `BaselineComparison` 类，用于编程接口
+- `run_experiment.py`: 命令行工具，自动处理数据并运行所有对比，更方便
 
 ### Q: 我的数据很大，训练时间太长怎么办？
 
 ```bash
 # 减少 NAM 训练轮数
-python compare_all_models.py \
+python run_experiment.py \
     --data_path data.csv \
     --target_column target \
     --nam_epochs 500 \
