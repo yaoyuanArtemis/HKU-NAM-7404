@@ -1,0 +1,29 @@
+neural_additive_models/download_datasets.py
+  8415efdbc8a687f0 1-255
+neural_additive_models/run_all_datasets.py
+  8415efdbc8a687f0 3-4,6-9,20-21,23-24,26-28,32-33,35,37,40,44-45,47,50,52,55-61,65,67,77,87-92,94-95,97-100,102,104-108,110-113,116,122-123,128,284,287-291,330
+neural_additive_models/DATASET_GUIDE.md
+  8415efdbc8a687f0 1-247
+neural_additive_models/NAM_Complete_Workflow.ipynb
+  8415efdbc8a687f0 1-140,148-411
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "dd9f95a77289cebaba36e50acd1a32b957643e4d",
+  "prompts": {
+    "8415efdbc8a687f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959629c6-f63f-46aa-a84b-26cd76058679",
+        "model": "claude-sonnet-4-5-20250929"
+      },
+      "human_author": "liufeng <feng.liu@bybit.com>",
+      "messages": [],
+      "total_additions": 994,
+      "total_deletions": 48,
+      "accepted_lines": 976,
+      "overriden_lines": 0
+    }
+  }
+}
