@@ -1,0 +1,29 @@
+neural_additive_models/nam/nam_train_test.py
+  8415efdbc8a687f0 19-20,28-29
+neural_additive_models/nam/graph_builder.py
+  8415efdbc8a687f0 19-20,27-28
+neural_additive_models/baseline/run_experiment.py
+  8415efdbc8a687f0 32-36
+neural_additive_models/nam/nam_train.py
+  8415efdbc8a687f0 22-23,30-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "64b810a9df14cc0219c55a195e291ecdbeb2c4db",
+  "prompts": {
+    "8415efdbc8a687f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959629c6-f63f-46aa-a84b-26cd76058679",
+        "model": "claude-sonnet-4-5-20250929"
+      },
+      "human_author": "liufeng <feng.liu@bybit.com>",
+      "messages": [],
+      "total_additions": 20,
+      "total_deletions": 0,
+      "accepted_lines": 20,
+      "overriden_lines": 0
+    }
+  }
+}
