@@ -181,18 +181,39 @@ class BaselineComparison:
 
             else:
                 # For classification: compute AUROC
+                n_classes = len(np.unique(y_train))
+
                 if hasattr(model, 'predict_proba'):
-                    train_pred = model.predict_proba(X_train)[:, 1]
-                    val_pred = model.predict_proba(X_val)[:, 1]
-                    test_pred = model.predict_proba(X_test)[:, 1]
+                    train_pred_proba = model.predict_proba(X_train)
+                    val_pred_proba = model.predict_proba(X_val)
+                    test_pred_proba = model.predict_proba(X_test)
+
+                    if n_classes == 2:
+                        # Binary: use probability of positive class
+                        train_pred = train_pred_proba[:, 1]
+                        val_pred = val_pred_proba[:, 1]
+                        test_pred = test_pred_proba[:, 1]
+                    else:
+                        # Multiclass: use all class probabilities
+                        train_pred = train_pred_proba
+                        val_pred = val_pred_proba
+                        test_pred = test_pred_proba
                 else:
                     train_pred = model.predict(X_train)
                     val_pred = model.predict(X_val)
                     test_pred = model.predict(X_test)
 
-                train_metric = roc_auc_score(y_train, train_pred)
-                val_metric = roc_auc_score(y_val, val_pred)
-                test_metric = roc_auc_score(y_test, test_pred)
+                # Compute AUROC
+                if n_classes == 2:
+                    # Binary classification
+                    train_metric = roc_auc_score(y_train, train_pred)
+                    val_metric = roc_auc_score(y_val, val_pred)
+                    test_metric = roc_auc_score(y_test, test_pred)
+                else:
+                    # Multiclass: use macro average with ovr
+                    train_metric = roc_auc_score(y_train, train_pred, multi_class='ovr', average='macro')
+                    val_metric = roc_auc_score(y_val, val_pred, multi_class='ovr', average='macro')
+                    test_metric = roc_auc_score(y_test, test_pred, multi_class='ovr', average='macro')
                 metric_name = 'AUROC'
 
             # Store results

@@ -29,7 +29,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-from baseline_models import BaselineComparison
+from baseline.baseline_models import BaselineComparison
 
 
 def parse_args():
@@ -298,6 +298,51 @@ def run_baselines(
     train_df = pd.read_csv(train_path)
     val_df = pd.read_csv(val_path)
     test_df = pd.read_csv(test_path)
+
+    # Preprocess: Handle categorical variables
+    from sklearn.preprocessing import LabelEncoder
+
+    # Identify categorical columns (object/string dtype)
+    cat_columns = train_df.select_dtypes(include=['object']).columns.tolist()
+    if target_column in cat_columns:
+        cat_columns.remove(target_column)
+
+    if cat_columns:
+        print(f"\n⚠️  发现 {len(cat_columns)} 个分类变量，正在编码...")
+        print(f"   分类列: {cat_columns[:5]}{'...' if len(cat_columns) > 5 else ''}")
+
+        # Use Label Encoding for each categorical column
+        label_encoders = {}
+        for col in cat_columns:
+            le = LabelEncoder()
+            # Fit on combined data to ensure consistent encoding
+            combined = pd.concat([train_df[col], val_df[col], test_df[col]])
+            le.fit(combined.astype(str))  # Convert to string to handle any type
+
+            train_df[col] = le.transform(train_df[col].astype(str))
+            val_df[col] = le.transform(val_df[col].astype(str))
+            test_df[col] = le.transform(test_df[col].astype(str))
+            label_encoders[col] = le
+
+        print(f"   ✓ 分类变量已编码")
+
+    # Encode target column if it's categorical (string type)
+    if train_df[target_column].dtype == 'object':
+        print(f"\n⚠️  目标列是分类变量，正在编码...")
+        target_encoder = LabelEncoder()
+        # Fit on combined target values
+        combined_target = pd.concat([
+            train_df[target_column],
+            val_df[target_column],
+            test_df[target_column]
+        ])
+        target_encoder.fit(combined_target.astype(str))
+
+        train_df[target_column] = target_encoder.transform(train_df[target_column].astype(str))
+        val_df[target_column] = target_encoder.transform(val_df[target_column].astype(str))
+        test_df[target_column] = target_encoder.transform(test_df[target_column].astype(str))
+
+        print(f"   ✓ 目标列已编码: {dict(enumerate(target_encoder.classes_))}")
 
     # Separate features and targets
     X_train = train_df.drop(columns=[target_column]).values

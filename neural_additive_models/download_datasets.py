@@ -135,11 +135,19 @@ def download_telco():
 
 
 def download_credit():
-    """下载 Credit Card Fraud 数据集说明。"""
+    """检查 Credit Card Fraud 数据集。"""
     print("\n[6/9] Credit Card Fraud")
     print("-" * 50)
+
+    # 检查文件是否已存在
+    output_path = os.path.join(DATA_DIR, 'creditcard.csv')
+    if os.path.exists(output_path):
+        file_size = os.path.getsize(output_path) / (1024 * 1024)  # MB
+        print(f"  ✓ 文件已存在: {output_path} ({file_size:.1f} MB)")
+        return True
+
     print("  ℹ️  Credit Card Fraud 数据集较大 (~150MB)")
-    print("  ℹ️  需要从 Kaggle 下载:")
+    print("  ℹ️  需要从 Kaggle 手动下载:")
     print("  📎 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud")
     print("  ")
     print("  下载步骤:")
@@ -163,21 +171,57 @@ def download_recidivism():
 
 
 def download_fico():
-    """FICO Score 数据集说明。"""
-    print("\n[8/9] FICO Score")
+    """检查 FICO Score 数据集。"""
+    print("\n[8/9] FICO Score (HELOC)")
     print("-" * 50)
-    print("  ℹ️  FICO Score 数据集需要注册")
+
+    # 检查文件是否已存在（支持多种可能的文件名）
+    possible_names = ['heloc_dataset.csv', 'fico.csv', 'heloc.csv']
+    for filename in possible_names:
+        output_path = os.path.join(DATA_DIR, filename)
+        if os.path.exists(output_path):
+            file_size = os.path.getsize(output_path) / 1024  # KB
+            print(f"  ✓ 文件已存在: {output_path} ({file_size:.1f} KB)")
+            return True
+
+    print("  ℹ️  FICO HELOC 数据集需要注册")
     print("  📎 https://community.fico.com/s/explainable-machine-learning-challenge")
+    print("  ")
+    print("  下载步骤:")
+    print("  1. 访问上述链接并注册")
+    print("  2. 下载 heloc_dataset_v1.csv")
+    print("  3. 重命名为 heloc_dataset.csv")
+    print("  4. 将文件放到 ./datasets/ 目录")
     print("  ⏭️  跳过自动下载")
     return False
 
 
 def download_mimic2():
-    """MIMIC-II 数据集说明。"""
-    print("\n[9/9] MIMIC-II")
+    """检查 MIMIC-II 数据集。"""
+    print("\n[9/9] MIMIC-II ICU Mortality")
     print("-" * 50)
-    print("  ℹ️  MIMIC-II 需要 PhysioNet 授权")
-    print("  📎 https://mimic.mit.edu/docs/gettingstarted/")
+
+    # 检查文件是否已存在
+    output_path = os.path.join(DATA_DIR, 'mimic2.csv')
+    if os.path.exists(output_path):
+        file_size = os.path.getsize(output_path) / 1024  # KB
+        print(f"  ✓ 文件已存在: {output_path} ({file_size:.1f} KB)")
+        return True
+
+    print("  ℹ️  MIMIC-II 需要手动获取")
+    print("  📎 https://mimic.mit.edu/")
+    print("")
+    print("  数据格式要求:")
+    print("  - 文件名: mimic2.csv")
+    print("  - 任务: ICU 死亡率预测（二分类）")
+    print("  - 目标列名: 'label' (0=存活, 1=死亡)")
+    print("  - 特征: ICU 前 48 小时生理指标")
+    print("")
+    print("  获取方式:")
+    print("  1. 申请 PhysioNet 访问权限")
+    print("  2. 联系 NAM 论文作者获取预处理数据")
+    print("  3. 从其他来源获取相同预处理的数据")
+    print("")
     print("  ⏭️  跳过自动下载")
     return False
 
