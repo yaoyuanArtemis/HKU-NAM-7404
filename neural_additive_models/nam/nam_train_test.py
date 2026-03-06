@@ -16,12 +16,17 @@
 """Tests functionality of training NAM models."""
 
 import os
+import sys
+from pathlib import Path
 
 from absl import flags
 from absl.testing import absltest
 from absl.testing import flagsaver
 from absl.testing import parameterized
 import tensorflow.compat.v1 as tf
+
+# 添加父目录到路径，以便导入模块
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from nam import nam_train
 

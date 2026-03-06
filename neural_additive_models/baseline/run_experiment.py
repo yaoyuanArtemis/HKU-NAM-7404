@@ -29,6 +29,11 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+# 添加父目录到路径，以便导入模块
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from baseline.baseline_models import BaselineComparison
 
 

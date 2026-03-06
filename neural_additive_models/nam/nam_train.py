@@ -19,11 +19,16 @@ r"""Training script for Neural Additive Models.
 
 import operator
 import os
+import sys
+from pathlib import Path
 from typing import Tuple, Iterator, List, Dict
 from absl import app
 from absl import flags
 import numpy as np
 import tensorflow.compat.v1 as tf
+
+# 添加父目录到路径，以便导入模块
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from nam import data_utils
 from nam import graph_builder

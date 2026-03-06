@@ -16,11 +16,16 @@
 """Build a deep GAM model graph."""
 
 import functools
+import sys
+from pathlib import Path
 from typing import Union, List, Optional, Tuple, Callable, Dict
 import warnings
 import numpy as np
 from sklearn import metrics as sk_metrics
 import tensorflow.compat.v1 as tf
+
+# 添加父目录到路径，以便导入模块
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from nam import models
 
