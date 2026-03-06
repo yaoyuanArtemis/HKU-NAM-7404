@@ -1,0 +1,37 @@
+neural_additive_models/baseline/__init__.py
+  8415efdbc8a687f0 1-13
+neural_additive_models/nam/graph_builder.py
+  8415efdbc8a687f0 25
+neural_additive_models/NAM_Complete_Workflow.ipynb
+  8415efdbc8a687f0 30-32,69-70,74-75,77-78,84-91,98-113,424,520-523,528-529,543
+neural_additive_models/main.py
+  8415efdbc8a687f0 12,15,18,131,231
+neural_additive_models/baseline/run_experiment.py
+  8415efdbc8a687f0 32
+neural_additive_models/download_datasets.py
+  8415efdbc8a687f0 138,141-148,150,174-175,177-187,189-194,200-201,203-224
+neural_additive_models/nam/nam_train.py
+  8415efdbc8a687f0 28-29
+neural_additive_models/nam/nam_train_test.py
+  8415efdbc8a687f0 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "86cafa5749223ee5315023d838d0d4be50e0d119",
+  "prompts": {
+    "8415efdbc8a687f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "959629c6-f63f-46aa-a84b-26cd76058679",
+        "model": "claude-sonnet-4-5-20250929"
+      },
+      "human_author": "liufeng <feng.liu@bybit.com>",
+      "messages": [],
+      "total_additions": 472,
+      "total_deletions": 123,
+      "accepted_lines": 421,
+      "overriden_lines": 2
+    }
+  }
+}
